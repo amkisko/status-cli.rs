@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `status watch` interactive watchlist dashboard (ratatui): periodic refresh, keyboard navigation
 
+### Changed
+
+- Shrink the release binary with thin LTO, symbol stripping, and a single codegen unit
+
 ## [0.1.0] - 2026-07-18
 
 ### Added
