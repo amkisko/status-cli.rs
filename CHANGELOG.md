@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Embed the offline catalog as gzip instead of raw JSON to shrink the release binary.
+- Assert the CLI version from the package version in tests.
+
 ## 0.2.0 (2026-07-25)
 
 - Add `status watch` interactive watchlist dashboard with periodic refresh and keyboard navigation.

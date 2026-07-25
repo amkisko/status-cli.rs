@@ -7,11 +7,12 @@ fn status() -> Command {
 
 #[test]
 fn version_prints_package_version() {
+    let expected = format!("status {}", env!("CARGO_PKG_VERSION"));
     status()
         .arg("version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("status 0.1.0"));
+        .stdout(predicate::str::contains(expected));
 }
 
 #[test]

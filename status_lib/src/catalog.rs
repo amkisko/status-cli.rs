@@ -1,10 +1,14 @@
 //! Offline service catalog loaded from embedded awesome-status data.
 
+use std::io::Read;
+
+use flate2::read::GzDecoder;
+
 use crate::error::{Error, Result};
 use crate::fuzzy::{dedupe_by_name, find_services_fuzzy};
 use crate::models::{FuzzyMatch, MatchType, Service};
 
-const DATA_JSON: &str = include_str!("../assets/data.json");
+const DATA_JSON_GZ: &[u8] = include_bytes!("../assets/data.json.gz");
 
 #[derive(Debug, Clone)]
 pub struct Catalog {
@@ -13,7 +17,16 @@ pub struct Catalog {
 
 impl Catalog {
     pub fn load() -> Result<Self> {
-        let services: Vec<Service> = serde_json::from_str(DATA_JSON).map_err(|error| {
+        Self::load_from_gzip(DATA_JSON_GZ)
+    }
+
+    fn load_from_gzip(bytes: &[u8]) -> Result<Self> {
+        let mut decoder = GzDecoder::new(bytes);
+        let mut json = String::new();
+        decoder
+            .read_to_string(&mut json)
+            .map_err(|error| Error::Catalog(format!("failed to decompress catalog: {error}")))?;
+        let services: Vec<Service> = serde_json::from_str(&json).map_err(|error| {
             Error::Catalog(format!("failed to parse embedded catalog: {error}"))
         })?;
         Ok(Self { services })
@@ -108,5 +121,11 @@ mod tests {
             .expect("url");
         assert_eq!(url, "https://status.example.com");
         assert!(service.is_none());
+    }
+
+    #[test]
+    fn corrupt_gzip_returns_catalog_error() {
+        let error = Catalog::load_from_gzip(b"not-gzip").expect_err("corrupt");
+        assert!(error.to_string().contains("decompress"));
     }
 }
