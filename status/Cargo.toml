@@ -18,15 +18,20 @@ path = "src/lib.rs"
 name = "status"
 path = "src/main.rs"
 
+[features]
+default = ["html", "watch"]
+html = ["status_lib/html"]
+watch = ["dep:ratatui"]
+
 [dependencies]
-status_lib = { path = "../status_lib" }
+status_lib = { path = "../status_lib", default-features = false }
 clap = { version = "4", features = ["derive", "env"] }
 clap_complete = "4"
 clap_mangen = "0.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 toml = "0.8"
-ratatui = { version = "0.30", default-features = false, features = ["crossterm", "std", "underline-color", "layout-cache"] }
+ratatui = { version = "0.30", default-features = false, features = ["crossterm", "std", "underline-color", "layout-cache"], optional = true }
 
 [dev-dependencies]
 assert_cmd = "2"

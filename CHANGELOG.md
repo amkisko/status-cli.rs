@@ -4,6 +4,8 @@
 
 - Embed the offline catalog as gzip instead of raw JSON to shrink the release binary.
 - Assert the CLI version from the package version in tests.
+- Make HTML scraping and the interactive watch dashboard optional features while preserving them by default.
+- Support slim builds with `--no-default-features` while retaining Statuspage, incident.io, and RSS/Atom fetching.
 
 ## 0.2.0 (2026-07-25)
 

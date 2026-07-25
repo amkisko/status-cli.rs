@@ -1,6 +1,7 @@
 //! Live status fetch pipeline: Statuspage → incident.io → RSS/Atom → HTML.
 
 mod feed;
+#[cfg(feature = "html")]
 mod html;
 mod http;
 mod incident_io;
@@ -86,20 +87,27 @@ fn fetch_status_inner(status_url: &str, max_length: usize, timeout: u64) -> Resu
         }
     }
 
-    let main_info = fetch_html_page(status_url, max_length, timeout, feed_info.is_some());
-    let history_url = html::build_history_url(status_url);
-    let history_info = history_url.as_ref().and_then(|url| {
-        let response = http::fetch(
-            url,
-            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            timeout,
-        )
-        .ok()?;
-        if !(200..300).contains(&response.status) {
-            return None;
-        }
-        html::extract_from_html(&response.body, max_length, true).ok()
-    });
+    #[cfg(feature = "html")]
+    let (history_url, main_info, history_info) = {
+        let main_info = fetch_html_page(status_url, max_length, timeout, feed_info.is_some());
+        let history_url = html::build_history_url(status_url);
+        let history_info = history_url.as_ref().and_then(|url| {
+            let response = http::fetch(
+                url,
+                "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                timeout,
+            )
+            .ok()?;
+            if !(200..300).contains(&response.status) {
+                return None;
+            }
+            html::extract_from_html(&response.body, max_length, true).ok()
+        });
+        (history_url, main_info, history_info)
+    };
+
+    #[cfg(not(feature = "html"))]
+    let (history_url, main_info, history_info) = (None, None, None);
 
     Ok(merge::merge_results(
         status_url,
@@ -131,6 +139,7 @@ fn merge_partial(existing: Option<PartialStatus>, incoming: PartialStatus) -> Pa
     base
 }
 
+#[cfg(feature = "html")]
 fn fetch_html_page(
     status_url: &str,
     max_length: usize,
