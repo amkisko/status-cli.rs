@@ -2,6 +2,9 @@
 
 use crate::models::PartialStatus;
 use crate::text::{purify_text, truncate_array};
+#[cfg(not(feature = "html"))]
+use regex::Regex;
+#[cfg(feature = "html")]
 use scraper::Html;
 use serde_json::Value;
 
@@ -215,6 +218,7 @@ fn string_field(value: &Value, key: &str) -> Option<String> {
         .map(str::to_string)
 }
 
+#[cfg(feature = "html")]
 fn clean_html(text: String) -> String {
     if !text.contains('<') {
         return text;
@@ -223,6 +227,18 @@ fn clean_html(text: String) -> String {
         .root_element()
         .text()
         .collect::<String>()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+#[cfg(not(feature = "html"))]
+fn clean_html(text: String) -> String {
+    let without_tags = Regex::new(r"<[^>]*>")
+        .ok()
+        .map(|regex| regex.replace_all(&text, " ").into_owned())
+        .unwrap_or(text);
+    without_tags
         .split_whitespace()
         .collect::<Vec<_>>()
         .join(" ")
@@ -263,5 +279,26 @@ mod tests {
             .history
             .iter()
             .any(|item| item.contains("Threads comments")));
+    }
+
+    #[test]
+    fn strips_html_from_incident_descriptions() {
+        let json = r#"{
+          "summary": {
+            "ongoing_incidents": [{
+              "name":"API incident",
+              "status":"Investigating",
+              "description":"<p>API latency is elevated</p>"
+            }],
+            "scheduled_maintenances": [],
+            "components": []
+          }
+        }"#;
+        let parsed = parse_incident_io_api(json, 10_000);
+        assert!(parsed
+            .history
+            .iter()
+            .any(|item| item.contains("API latency is elevated")));
+        assert!(parsed.history.iter().all(|item| !item.contains('<')));
     }
 }

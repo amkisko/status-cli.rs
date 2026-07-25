@@ -112,6 +112,12 @@ make test
 make sync-packaging
 ```
 
+After updating `status_lib/assets/data.json`, refresh the embedded archive:
+
+```bash
+gzip -9 -n -c status_lib/assets/data.json > status_lib/assets/data.json.gz
+```
+
 Live provider checks (network; not run in CI):
 
 ```bash

@@ -3,6 +3,7 @@
 use clap::{Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
 
+#[cfg(feature = "watch")]
 pub const LONG_ABOUT: &str = "\
 Search the awesome-status catalog and check live status pages from the terminal.
 
@@ -19,6 +20,23 @@ Catalog data is bundled offline. Live checks use public HTTP (no API keys).
 Documentation: https://github.com/amkisko/status-cli.rs
 Report issues: https://github.com/amkisko/status-cli.rs/issues";
 
+#[cfg(not(feature = "watch"))]
+pub const LONG_ABOUT: &str = "\
+Search the awesome-status catalog and check live status pages from the terminal.
+
+Examples:
+  status search github
+  status show \"GitHub\"
+  status list --limit 20
+  status check github
+  status fetch https://www.githubstatus.com
+
+Catalog data is bundled offline. Live checks use public HTTP (no API keys).
+
+Documentation: https://github.com/amkisko/status-cli.rs
+Report issues: https://github.com/amkisko/status-cli.rs/issues";
+
+#[cfg(feature = "watch")]
 pub const AFTER_HELP: &str = "\
 Output:
   -o plain          Human-readable text (default)
@@ -31,6 +49,21 @@ Exit codes: 0 success, 1 general error, 2 usage, 3 degraded (with --fail-if-degr
 Automation:
   status check --from ~/.config/status/watchlist.toml --fail-if-degraded --append-jsonl checks.jsonl
   status watch --from ~/.config/status/watchlist.toml
+
+Run `status help <command>` for command-specific examples.";
+
+#[cfg(not(feature = "watch"))]
+pub const AFTER_HELP: &str = "\
+Output:
+  -o plain          Human-readable text (default)
+  --plain           Script-stable key=value lines
+  -o json           Pretty JSON
+  --json            Compact JSON for scripts
+
+Exit codes: 0 success, 1 general error, 2 usage, 3 degraded (with --fail-if-degraded), 4 network/fetch, 5 I/O
+
+Automation:
+  status check --from ~/.config/status/watchlist.toml --fail-if-degraded --append-jsonl checks.jsonl
 
 Run `status help <command>` for command-specific examples.";
 
@@ -157,6 +190,7 @@ pub enum Commands {
         #[arg(long, default_value_t = 10000)]
         max_length: usize,
     },
+    #[cfg(feature = "watch")]
     /// Interactive watchlist dashboard (terminal UI)
     #[command(
         after_help = "Keys: q/Esc quit · r refresh · j/k or ↑/↓ select\nExamples:\n  status watch github\n  status watch --from ~/.config/status/watchlist.toml --interval 30"

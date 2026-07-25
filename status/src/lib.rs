@@ -7,6 +7,7 @@ mod exit;
 mod jsonl;
 mod man;
 mod output;
+#[cfg(feature = "watch")]
 mod watch;
 mod watchlist;
 
@@ -16,6 +17,7 @@ use commands::{CheckOptions, FetchOptions};
 use exit::AppExit;
 use output::{resolve_output_mode, OutputFormat};
 use std::process::ExitCode;
+#[cfg(feature = "watch")]
 use watch::WatchOptions;
 
 pub fn run() -> ExitCode {
@@ -61,6 +63,7 @@ pub fn run() -> ExitCode {
             append_jsonl: append_jsonl.as_deref(),
             mode,
         }),
+        #[cfg(feature = "watch")]
         Commands::Watch {
             target,
             from,

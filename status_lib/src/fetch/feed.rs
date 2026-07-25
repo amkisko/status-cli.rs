@@ -194,6 +194,7 @@ fn infer_status_from_history(history: &[String], feed_title: Option<&str>) -> Op
     }
 }
 
+#[cfg(feature = "html")]
 fn strip_html(text: &str) -> String {
     if !text.contains('<') {
         return text.to_string();
@@ -201,7 +202,20 @@ fn strip_html(text: &str) -> String {
     scraper::Html::parse_fragment(text)
         .root_element()
         .text()
-        .collect::<String>()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+#[cfg(not(feature = "html"))]
+fn strip_html(text: &str) -> String {
+    let without_tags = Regex::new(r"<[^>]*>")
+        .ok()
+        .map(|regex| regex.replace_all(text, " ").into_owned())
+        .unwrap_or_else(|| text.to_string());
+    without_tags
         .split_whitespace()
         .collect::<Vec<_>>()
         .join(" ")
@@ -231,5 +245,24 @@ mod tests {
         let parsed = parse_feed(rss, 10_000);
         assert_eq!(parsed.latest_status.as_deref(), Some("Investigating"));
         assert!(!parsed.history.is_empty());
+    }
+
+    #[test]
+    fn parses_html_feed_descriptions() {
+        let rss = r#"<?xml version="1.0"?>
+        <rss version="2.0"><channel>
+          <title>Example Status</title>
+          <item>
+            <title>API Outage</title>
+            <description><![CDATA[<p>Status: <strong>Investigating</strong></p><p>API latency</p>]]></description>
+          </item>
+        </channel></rss>"#;
+        let parsed = parse_feed(rss, 10_000);
+        assert_eq!(parsed.latest_status.as_deref(), Some("Investigating"));
+        assert!(parsed
+            .history
+            .iter()
+            .any(|item| item.contains("API latency")));
+        assert!(parsed.history.iter().all(|item| !item.contains('<')));
     }
 }

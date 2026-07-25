@@ -23,8 +23,29 @@ fn help_lists_core_commands() {
         .success()
         .stdout(predicate::str::contains("search"))
         .stdout(predicate::str::contains("check"))
-        .stdout(predicate::str::contains("watch"))
         .stdout(predicate::str::contains("fetch"));
+}
+
+#[cfg(feature = "watch")]
+#[test]
+fn help_lists_watch_command() {
+    status()
+        .arg("--help")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains(
+            "watch        Interactive watchlist dashboard",
+        ));
+}
+
+#[cfg(not(feature = "watch"))]
+#[test]
+fn help_omits_watch_command() {
+    status()
+        .arg("--help")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("watch        Interactive watchlist dashboard").not());
 }
 
 #[test]
@@ -69,11 +90,13 @@ fn check_requires_target_or_from() {
     status().arg("check").assert().failure().code(2);
 }
 
+#[cfg(feature = "watch")]
 #[test]
 fn watch_requires_target_or_from() {
     status().arg("watch").assert().failure().code(2);
 }
 
+#[cfg(feature = "watch")]
 #[test]
 fn watch_help_lists_keys_and_interval() {
     status()

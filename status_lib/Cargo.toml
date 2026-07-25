@@ -11,14 +11,19 @@ keywords.workspace = true
 categories.workspace = true
 description = "Status page catalog and live fetch library"
 
+[features]
+default = ["html"]
+html = ["dep:scraper"]
+
 [dependencies]
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
 reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
 chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
 url = "2"
-scraper = "0.23"
+scraper = { version = "0.23", optional = true }
 feed-rs = "2"
 regex = "1"
 
