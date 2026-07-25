@@ -5,7 +5,7 @@
 class StatusCli < Formula
   desc "Status page CLI — search catalog and check live status"
   homepage "https://github.com/amkisko/status-cli.rs"
-  url "https://github.com/amkisko/status-cli.rs/archive/refs/tags/v0.1.0.tar.gz"
+  url "https://github.com/amkisko/status-cli.rs/archive/refs/tags/v0.2.0.tar.gz"
   # Fill before release: shasum -a 256 <(curl -sL https://github.com/amkisko/status-cli.rs/archive/refs/tags/vX.Y.Z.tar.gz)
   sha256 ""
   license "MIT"

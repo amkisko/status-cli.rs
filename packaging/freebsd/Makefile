@@ -3,7 +3,7 @@
 
 PORTNAME=	status-cli
 DISTVERSIONPREFIX=	v
-DISTVERSION=	0.1.0
+DISTVERSION=	0.2.0
 CATEGORIES=	sysutils
 MAINTAINER=	contact@kiskolabs.com
 COMMENT=	Status page CLI - search catalog and check live status

@@ -1944,7 +1944,7 @@ checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
 
 [[package]]
 name = "release"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "reqwest"
@@ -2290,7 +2290,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "status"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "assert_cmd",
  "clap",
@@ -2306,7 +2306,7 @@ dependencies = [
 
 [[package]]
 name = "status_lib"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "chrono",
  "feed-rs",

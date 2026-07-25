@@ -1,6 +1,6 @@
 [package]
 name = "release"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 publish = false
 description = "Release tooling for status-cli (packaging sync, loc checks, release)"

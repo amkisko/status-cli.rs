@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 (2026-07-25)
+
 - Add `status watch` interactive watchlist dashboard with periodic refresh and keyboard navigation.
 - Shrink the release binary with thin LTO, symbol stripping, and a single codegen unit.
 
