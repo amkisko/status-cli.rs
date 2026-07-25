@@ -22,6 +22,7 @@ fn help_lists_core_commands() {
         .success()
         .stdout(predicate::str::contains("search"))
         .stdout(predicate::str::contains("check"))
+        .stdout(predicate::str::contains("watch"))
         .stdout(predicate::str::contains("fetch"));
 }
 
@@ -65,6 +66,21 @@ fn fetch_requires_url() {
 #[test]
 fn check_requires_target_or_from() {
     status().arg("check").assert().failure().code(2);
+}
+
+#[test]
+fn watch_requires_target_or_from() {
+    status().arg("watch").assert().failure().code(2);
+}
+
+#[test]
+fn watch_help_lists_keys_and_interval() {
+    status()
+        .args(["watch", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("interval"))
+        .stdout(predicate::str::contains("refresh"));
 }
 
 #[test]

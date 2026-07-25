@@ -140,7 +140,10 @@ pub fn run_fetch(options: FetchOptions<'_>) -> Result<(), AppExit> {
     Ok(())
 }
 
-fn resolve_targets(target: Option<&str>, from: Option<&Path>) -> Result<Vec<String>, AppExit> {
+pub(crate) fn resolve_targets(
+    target: Option<&str>,
+    from: Option<&Path>,
+) -> Result<Vec<String>, AppExit> {
     match (target, from) {
         (Some(target), None) => Ok(vec![target.to_string()]),
         (None, Some(path)) => watchlist::load_targets(path).map_err(|message| {

@@ -11,6 +11,7 @@ Examples:
   status show \"GitHub\"
   status list --limit 20
   status check github
+  status watch --from ~/.config/status/watchlist.toml
   status fetch https://www.githubstatus.com
 
 Catalog data is bundled offline. Live checks use public HTTP (no API keys).
@@ -29,6 +30,7 @@ Exit codes: 0 success, 1 general error, 2 usage, 3 degraded (with --fail-if-degr
 
 Automation:
   status check --from ~/.config/status/watchlist.toml --fail-if-degraded --append-jsonl checks.jsonl
+  status watch --from ~/.config/status/watchlist.toml
 
 Run `status help <command>` for command-specific examples.";
 
@@ -151,6 +153,24 @@ pub enum Commands {
         /// Append one compact JSON object for the result
         #[arg(long = "append-jsonl", value_name = "FILE")]
         append_jsonl: Option<PathBuf>,
+        /// Maximum extracted text length
+        #[arg(long, default_value_t = 10000)]
+        max_length: usize,
+    },
+    /// Interactive watchlist dashboard (terminal UI)
+    #[command(
+        after_help = "Keys: q/Esc quit · r refresh · j/k or ↑/↓ select\nExamples:\n  status watch github\n  status watch --from ~/.config/status/watchlist.toml --interval 30"
+    )]
+    Watch {
+        /// Service name or status page URL
+        #[arg(required_unless_present = "from")]
+        target: Option<String>,
+        /// Watchlist file (TOML/JSON/line list of names or URLs)
+        #[arg(long = "from", value_name = "FILE")]
+        from: Option<PathBuf>,
+        /// Refresh interval in seconds (default: 30)
+        #[arg(long, default_value_t = 30, env = "STATUS_WATCH_INTERVAL")]
+        interval: u64,
         /// Maximum extracted text length
         #[arg(long, default_value_t = 10000)]
         max_length: usize,

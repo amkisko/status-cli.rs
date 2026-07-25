@@ -7,6 +7,7 @@ mod exit;
 mod jsonl;
 mod man;
 mod output;
+mod watch;
 mod watchlist;
 
 use clap::Parser;
@@ -15,6 +16,7 @@ use commands::{CheckOptions, FetchOptions};
 use exit::AppExit;
 use output::{resolve_output_mode, OutputFormat};
 use std::process::ExitCode;
+use watch::WatchOptions;
 
 pub fn run() -> ExitCode {
     let cli = Cli::parse();
@@ -58,6 +60,18 @@ pub fn run() -> ExitCode {
             fail_if_degraded,
             append_jsonl: append_jsonl.as_deref(),
             mode,
+        }),
+        Commands::Watch {
+            target,
+            from,
+            interval,
+            max_length,
+        } => watch::run_watch(WatchOptions {
+            target: target.as_deref(),
+            from: from.as_deref(),
+            interval_secs: interval,
+            max_length,
+            timeout: cli.timeout,
         }),
         Commands::Completions { shell } => {
             completions::print_completions(shell);

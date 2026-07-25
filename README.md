@@ -44,8 +44,18 @@ status search github
 status show "GitHub"
 status list --limit 20
 status check github
+status watch --from ~/.config/status/watchlist.toml
 status fetch https://www.githubstatus.com
 ```
+
+### Interactive watch
+
+```bash
+status watch github
+status watch --from ~/.config/status/watchlist.toml --interval 30
+```
+
+Keys: `q` / Esc quit, `r` refresh now, `j`/`k` or arrows select a row.
 
 ### Local automation
 
@@ -61,6 +71,7 @@ status check --from ~/.config/status/watchlist.toml --json \
 - `--from` — file of catalog names or URLs (TOML `targets = [...]`, JSON, or one-per-line)
 - `--fail-if-degraded` — exit `3` when any result is degraded or missing a status
 - `--append-jsonl` — append one compact JSON object per result (cron-friendly)
+- `--interval` / `STATUS_WATCH_INTERVAL` — refresh period for `status watch` (default 30s)
 
 ### Output
 
