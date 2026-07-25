@@ -1,0 +1,4 @@
+{
+  "page": {"id": "example", "name": "Example", "url": "https://status.example.com", "updated_at": "2026-07-18T00:00:00Z"},
+  "status": {"indicator": "none", "description": "All Systems Operational"}
+}

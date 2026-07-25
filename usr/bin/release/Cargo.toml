@@ -1,0 +1,23 @@
+[package]
+name = "release"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Release tooling for status-cli (packaging sync, loc checks, release)"
+default-run = "release"
+
+[lib]
+name = "release"
+path = "lib.rs"
+
+[[bin]]
+name = "release"
+path = "release.rs"
+
+[[bin]]
+name = "sync-packaging"
+path = "sync_packaging.rs"
+
+[[bin]]
+name = "check-loc"
+path = "check_loc.rs"

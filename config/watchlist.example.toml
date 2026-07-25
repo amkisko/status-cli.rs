@@ -1,0 +1,10 @@
+# Copy to ~/.config/status/watchlist.toml (or any path) and pass with:
+#   status check --from ~/.config/status/watchlist.toml --fail-if-degraded --append-jsonl checks.jsonl
+#
+# Each target is a catalog service name or a status page URL.
+
+targets = [
+  "github",
+  "cloudflare",
+  "https://status.openai.com",
+]

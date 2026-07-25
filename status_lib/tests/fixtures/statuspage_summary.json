@@ -1,0 +1,15 @@
+{
+  "page": {"id": "example", "name": "Example"},
+  "status": {"indicator": "minor", "description": "Minor Service Outage"},
+  "incidents": [
+    {
+      "name": "API latency",
+      "status": "investigating",
+      "impact": "minor",
+      "updated_at": "2026-07-18T12:00:00Z",
+      "shortlink": "https://status.example.com/incidents/1"
+    }
+  ],
+  "scheduled_maintenances": [],
+  "components": [{"name": "API", "status": "degraded_performance"}]
+}

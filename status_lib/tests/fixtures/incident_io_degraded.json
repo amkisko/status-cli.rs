@@ -1,0 +1,13 @@
+{
+  "summary": {
+    "ongoing_incidents": [
+      {"name": "Issue with Threads comments", "status": "identified", "description": "Some users affected"}
+    ],
+    "scheduled_maintenances": [],
+    "components": [{"name": "Publish", "status": "Operational"}],
+    "affected_components": [
+      {"component_id": "a", "status": "degraded_performance"},
+      {"component_id": "b", "status": "degraded_performance"}
+    ]
+  }
+}
