@@ -64,7 +64,6 @@ pub fn parse_incident_io_api(json_body: &str, max_length: usize) -> PartialStatu
             };
         }
     };
-
     let summary = data.get("summary").cloned().unwrap_or(Value::Null);
     let ongoing = summary
         .get("ongoing_incidents")
@@ -86,7 +85,6 @@ pub fn parse_incident_io_api(json_body: &str, max_length: usize) -> PartialStatu
         .and_then(Value::as_array)
         .cloned()
         .unwrap_or_default();
-
     let mut history = Vec::new();
     for incident in &ongoing {
         if let Some(cleaned) = purify_text(Some(&format_incident(incident))) {
@@ -98,18 +96,15 @@ pub fn parse_incident_io_api(json_body: &str, max_length: usize) -> PartialStatu
             history.push(cleaned);
         }
     }
-
     let latest_status = Some(overall_status(
         &ongoing,
         &maintenances,
         &components,
         &affected,
     ));
-
     if history.join("\n").len() > max_length {
         history = truncate_array(&history, max_length);
     }
-
     PartialStatus {
         latest_status,
         history,
