@@ -2,13 +2,11 @@
 
 ## Reporting a Vulnerability
 
-**Do NOT** open a public GitHub issue for security vulnerabilities.
+Do not open a public issue for security vulnerabilities.
 
-Email security details to: **security@kiskolabs.com**
+Email security details to: security@kiskolabs.com
 
 Include: description, steps to reproduce, potential impact, and suggested fix (if available).
-
-Alternatively, report confidentially via **GitHub**: use the repository's *Security* tab → *Report a vulnerability*.
 
 ### Response Timeline
 
@@ -23,10 +21,7 @@ Alternatively, report confidentially via **GitHub**: use the repository's *Secur
 - We will publish a security advisory after the vulnerability is patched
 - We will coordinate public disclosure with you
 
-## HTTP fetching
+## Automation Security
 
-Live status checks fetch public status pages over HTTPS. Response bodies are capped at 1MB. No API keys or credentials are required or accepted by this CLI.
-
-## Supported versions
-
-We release patches for the latest minor version. Security updates are prioritized for the current stable release.
+- Context Isolation: It is strictly forbidden to include production credentials, API keys, or Personally Identifiable Information (PII) in prompts sent to third-party LLMs or automation services.
+- Supply Chain: All automated dependencies must be verified.
