@@ -23,7 +23,7 @@ serde_json = "1"
 thiserror = "2"
 chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
 url = "2"
-scraper = { version = "0.23", optional = true }
+scraper = { version = "0.27", optional = true }
 feed-rs = "2"
 regex = "1"
 
